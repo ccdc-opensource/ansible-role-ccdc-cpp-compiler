@@ -1,0 +1,9 @@
+---
+- name: read package info
+  command: installer -pkginfo -pkg "{{ package_file }}"
+  register: package_pkginfo
+
+- name: install package
+  command: installer -pkg "{{ package_file }}" -target /
+  when: package_pkginfo.stdout not in package_list
+  become: true
