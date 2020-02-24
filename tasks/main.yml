@@ -4,6 +4,7 @@
     name:
       - devtoolset-8
     state: latest
+    use_backend: yum
   when: "ansible_os_family == 'RedHat'"
 
 - name: Enable devtoolset globally for all users
