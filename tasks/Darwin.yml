@@ -41,6 +41,8 @@
 - name: Install Xcode packages
   include: install-pkg.yml
   vars:
-    package_file: "{{ item }}"
+    package_file: "{{ package }}"
     package_list: "{{ pkgutil_packages.stdout }}"
   with_items: "{{ packages.files | map(attribute='path') | list }}"
+  loop_control:
+    loop_var: package
