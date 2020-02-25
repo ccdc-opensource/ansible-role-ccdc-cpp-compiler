@@ -12,4 +12,5 @@
     lineinfile:
       path: "/etc/profile.d/enable-devtoolset.sh"
       line: "\nsource scl_source enable devtoolset-8\n"
+      create: yes
     become: yes
