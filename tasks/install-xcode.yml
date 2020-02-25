@@ -1,5 +1,5 @@
 ---
-- name: Check XCode app present
+- name: Check for existing Xcode installation
   stat:
     path: /Applications/Xcode.app
   register: xcode_app
@@ -18,29 +18,29 @@
     creates: "/Applications/Xcode.app"
   register: extract_xcode_xip
 
+- name: Remove downloaded Xcode archive
+  file:
+    state: absent
+    path: ~/Downloads/xcode.xip
+  
 - name: Accept Xcode licence
   command: xcodebuild -license accept
   become: true
 
-- name: get list of installed packages
+- name: Get list of installed packages
   command: pkgutil --pkgs
   register: pkgutil_packages
 
-- name: get list of packages in XCode
+- name: Get list of packages available with Xcode
   find:
     path: /Applications/Xcode.app/Contents/Resources/Packages/
     patterns: '*.pkg'
     recurse: no
   register: packages
 
-- name: add xcode package
+- name: Install Xcode packages
   include: install-pkg.yml
   vars:
     package_file: "{{ item }}"
     package_list: "{{ pkgutil_packages.stdout }}"
   with_items: "{{ packages.files | map(attribute='path') | list }}"
-
-- name: Clean downloaded xcode
-  file:
-    state: absent
-    path: ~/Downloads/xcode.xip
