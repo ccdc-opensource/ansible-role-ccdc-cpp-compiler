@@ -26,7 +26,7 @@
     file: install-xcode.yml
   when: "ansible_os_family == 'Darwin'"
 
-- name: Install visualstudio2017-workload-vctools
+- name: Install visualstudio2017-workload-vctools (SLOW)
   win_chocolatey:
     name: visualstudio2017-workload-vctools
     state: present
@@ -39,5 +39,3 @@
     name: visualstudio2017-remotetools
     state: present
   when: "ansible_os_family == 'Windows'"
-  
-  
