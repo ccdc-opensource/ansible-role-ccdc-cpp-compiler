@@ -1,11 +1,10 @@
 ---
-  - name: Install build tools (Centos)
+  - name: Install build tools
     yum:
       name:
         - devtoolset-8
       state: latest
       use_backend: yum
-    when: "ansible_os_family == 'RedHat'"
     become: yes
 
   - name: Enable devtoolset globally for all users
@@ -13,5 +12,4 @@
     lineinfile:
       path: "/etc/profile.d/enable-devtoolset.sh"
       line: "\nsource scl_source enable devtoolset-8\n"
-    when: "ansible_os_family == 'RedHat'"
     become: yes
