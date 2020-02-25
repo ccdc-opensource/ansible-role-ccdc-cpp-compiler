@@ -1,14 +1,14 @@
 ---
 - name: Install visualstudio2017-workload-vctools (SLOW)
-    win_chocolatey:
-        name: visualstudio2017-workload-vctools
-        state: present
-        # until we get Qt 5.12
-        package_params: "--add Microsoft.VisualStudio.Component.VC.Tools.14.14"
-    when: "ansible_os_family == 'Windows'"
+  win_chocolatey:
+    name: visualstudio2017-workload-vctools
+    state: present
+    # until we get Qt 5.12
+    package_params: "--add Microsoft.VisualStudio.Component.VC.Tools.14.14"
+  when: "ansible_os_family == 'Windows'"
 
 - name: Install visualstudio2017-remotetools
-    win_chocolatey:
-        name: visualstudio2017-remotetools
-        state: present
-    when: "ansible_os_family == 'Windows'"
+  win_chocolatey:
+    name: visualstudio2017-remotetools
+    state: present
+  when: "ansible_os_family == 'Windows'"
