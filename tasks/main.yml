@@ -1,44 +1,8 @@
 ---
-- name: Install build tools (Centos)
-  yum:
-    name:
-      - devtoolset-8
-    state: latest
-    use_backend: yum
-  when: "ansible_os_family == 'RedHat'"
-  become: yes
-
-- name: Enable devtoolset globally for all users
-  # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
-  lineinfile:
-    path: "/etc/profile.d/enable-devtoolset.sh"
-    line: "\nsource scl_source enable devtoolset-8\n"
-  when: "ansible_os_family == 'RedHat'"
-  become: yes
-
-- name: Install build tools (Debian)
-  apt:
-    name:
-      - build-essential
-    state: latest
-  when: "ansible_os_family == 'Debian'"
-  become: yes
-
-- name: install xcode
-  include_tasks:
-    file: install-xcode.yml
-  when: "ansible_os_family == 'Darwin'"
-
-- name: Install visualstudio2017-workload-vctools (SLOW)
-  win_chocolatey:
-    name: visualstudio2017-workload-vctools
-    state: present
-    # until we get Qt 5.12
-    package_params: "--add Microsoft.VisualStudio.Component.VC.Tools.14.14"
-  when: "ansible_os_family == 'Windows'"
-
-- name: Install visualstudio2017-remotetools
-  win_chocolatey:
-    name: visualstudio2017-remotetools
-    state: present
-  when: "ansible_os_family == 'Windows'"
+  - name: Set up C++ compilers
+    include_tasks: "{{ item }}"
+    with_first_found:
+      - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+      - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
+      - "{{ ansible_os_family }}.yml"
+      - "{{ ansible_system }}.yml"
