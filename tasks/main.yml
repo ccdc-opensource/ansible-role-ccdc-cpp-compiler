@@ -6,6 +6,7 @@
     state: latest
     use_backend: yum
   when: "ansible_os_family == 'RedHat'"
+  become: yes
 
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
@@ -13,13 +14,15 @@
     path: "/etc/profile.d/enable-devtoolset.sh"
     line: "\nsource scl_source enable devtoolset-8\n"
   when: "ansible_os_family == 'RedHat'"
-  
+  become: yes
+
 - name: Install build tools (Debian)
   apt:
     name:
       - build-essential
     state: latest
   when: "ansible_os_family == 'Debian'"
+  become: yes
 
 - name: install xcode
   include_tasks:
