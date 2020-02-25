@@ -22,7 +22,8 @@
   when: "ansible_os_family == 'Debian'"
 
 - name: install xcode
-    include_tasks: install-xcode.yml
+  include_tasks:
+    file: install-xcode.yml
   when: "ansible_os_family == 'Darwin'"
 
 - name: Install visualstudio2017-workload-vctools
