@@ -1,3 +1,3 @@
 ---
 xcode_xip_url: "https://artifactory.ccdc.cam.ac.uk/ccdc-3rdparty-macos-xcode-installers/Xcode_{{ xcode_version }}.xip"
-xcode_version: 11.1
+xcode_version: 11.3.1
