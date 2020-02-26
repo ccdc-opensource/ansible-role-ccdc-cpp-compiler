@@ -1,5 +1,5 @@
 ---
-  - name: Install build tools (Debian)
+  - name: Install build tools
     apt:
       name:
         - build-essential
