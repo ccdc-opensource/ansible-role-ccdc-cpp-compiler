@@ -7,10 +7,10 @@
       use_backend: yum
     become: yes
 
-  - name: Enable devtoolset globally for all users
-    # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
-    lineinfile:
-      path: "/etc/profile.d/enable-devtoolset.sh"
-      line: "\nsource scl_source enable devtoolset-8\n"
-      create: yes
-    become: yes
+  # - name: Enable devtoolset globally for all users
+  #   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
+  #   lineinfile:
+  #     path: "/etc/profile.d/enable-devtoolset.sh"
+  #     line: "\nsource scl_source enable devtoolset-8\n"
+  #     create: yes
+  #   become: yes
