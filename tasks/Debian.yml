@@ -1,7 +1,7 @@
 ---
-  - name: Install build tools
-    apt:
-      name:
-        - build-essential
-      state: latest
-    become: yes
+- name: Install build tools
+  apt:
+    name:
+      - build-essential
+    state: latest
+  become: yes
