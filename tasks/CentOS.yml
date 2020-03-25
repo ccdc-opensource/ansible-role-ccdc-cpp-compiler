@@ -3,9 +3,16 @@
   yum:
     name:
       - devtoolset-9
+      - cmake3
     state: latest
     use_backend: yum
   become: yes
+
+- name: Make cmake3 the default
+  alternatives:
+    name: cmake
+    path: /usr/bin/cmake3
+    priority: 100
 
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
