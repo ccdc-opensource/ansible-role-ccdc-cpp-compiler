@@ -3,17 +3,8 @@
   yum:
     name:
       - devtoolset-9
-      - cmake3
     state: latest
     use_backend: yum
-  become: yes
-
-- name: Make cmake3 the default
-  alternatives:
-    name: cmake
-    link: /usr/local/bin/cmake
-    path: /usr/bin/cmake3
-    priority: 100
   become: yes
 
 - name: Enable devtoolset globally for all users
