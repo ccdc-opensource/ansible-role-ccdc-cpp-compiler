@@ -15,6 +15,7 @@
   win_chocolatey:
     name: visualstudio2017-workload-nativedesktop
     state: present
+    package_params: --add Microsoft.VisualStudio.Component.VC.Tools.14.14
 
 - name: Install visualstudio2017-remotetools
   win_chocolatey:
