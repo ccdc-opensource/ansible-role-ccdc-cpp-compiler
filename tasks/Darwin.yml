@@ -7,6 +7,8 @@
 - name: Download XCode
   get_url:
     url: "{{ xcode_xip_url }}"
+    headers:
+      X-JFrog-Art-Api: "{{ansible_deployment_artifactory_key}}"
     dest: ~/Downloads/xcode.xip
     mode: '0440'
   when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
