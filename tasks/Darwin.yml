@@ -14,7 +14,7 @@
     "--user={{ ansible_deployment_artifactory_user }}"
     "--access-token={{ ansible_deployment_artifactory_key }}"
     "ccdc-3rdparty-macos-xcode-installers/Xcode_{{ xcode_version }}.xip"
-    "~/Downloads/"
+    ~/Downloads/
   environment:
     PATH: "/usr/local/bin:/usr/bin"
     CI: "true"
@@ -23,7 +23,7 @@
   register: download
 
 - name: Extract XCode archive
-  command: xip -x "~/Downloads/Xcode_{{ xcode_version }}.xip"
+  command: xip -x ~/Downloads/Xcode_{{ xcode_version }}.xip
   args:
     chdir: "/Applications"
     creates: "/Applications/Xcode.app"
