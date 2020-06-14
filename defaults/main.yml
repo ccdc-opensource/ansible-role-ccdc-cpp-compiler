@@ -1,3 +1,2 @@
 ---
-xcode_xip_url: "https://{{ansible_deployment_artifactory_user}}:{{ansible_deployment_artifactory_key}}@artifactory.ccdc.cam.ac.uk/artifactory/ccdc-3rdparty-macos-xcode-installers/Xcode_{{ xcode_version }}.xip"
 xcode_version: 11.5

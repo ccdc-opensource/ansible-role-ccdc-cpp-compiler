@@ -4,17 +4,26 @@
     path: /Applications/Xcode.app
   register: xcode_app
 
-- name: Download XCode
-  get_url:
-    url: "{{ xcode_xip_url }}"
-    headers:
-      X-JFrog-Art-Api: "{{ansible_deployment_artifactory_key}}"
-    dest: ~/Downloads/xcode.xip
-    mode: '0440'
+- name: "Download XCode {{ xcode_version }}"
+  shell: >
+    jfrog rt dl 
+    --flat
+    --fail-no-op
+    --retries=100
+    "--url=https://artifactory.ccdc.cam.ac.uk/artifactory"
+    "--user={{ ansible_deployment_artifactory_user }}"
+    "--access-token={{ ansible_deployment_artifactory_key }}"
+    "ccdc-3rdparty-macos-xcode-installers/Xcode_{{ xcode_version }}.xip"
+    "~/Downloads/"
+  environment:
+    PATH: "/usr/local/bin:/usr/bin"
+    CI: "true"
+    JFROG_CLI_OFFER_CONFIG: "false"
   when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
+  register: download
 
 - name: Extract XCode archive
-  command: xip -x ~/Downloads/xcode.xip
+  command: xip -x "~/Downloads/Xcode_{{ xcode_version }}.xip"
   args:
     chdir: "/Applications"
     creates: "/Applications/Xcode.app"
@@ -23,7 +32,7 @@
 - name: Remove downloaded Xcode archive
   file:
     state: absent
-    path: ~/Downloads/xcode.xip
+    path: "~/Downloads/Xcode_{{ xcode_version }}.xip"
   
 - name: Accept Xcode licence
   command: xcodebuild -license accept
