@@ -1,23 +1,15 @@
 ---
-# When we no longer need the intel fortran compiler, we can move to just this
-#- name: Install visualstudio2017-workload-vctools (SLOW)
-#  win_chocolatey:
-#    name: visualstudio2017-workload-vctools
-#    state: present
-
-# intel fortran compiler wants the full thing, not just the tools... £%$"T*($T)
-- name: Install visualstudio2017professional (SLOW)
+- name: Install visualstudio2019professional (SLOW)
   win_chocolatey:
-    name: visualstudio2017professional
+    name: visualstudio2019professional
     state: present
 
-- name: Install visualstudio2017-workload-nativedesktop (SLOW)
+- name: Install visualstudio2019-workload-nativedesktop (SLOW)
   win_chocolatey:
-    name: visualstudio2017-workload-nativedesktop
+    name: visualstudio2019-workload-nativedesktop
     state: present
-    package_params: --add Microsoft.VisualStudio.Component.VC.Tools.14.14
 
-- name: Install visualstudio2017-remotetools
+- name: Install visualstudio2019-remotetools
   win_chocolatey:
-    name: visualstudio2017-remotetools
+    name: visualstudio2019-remotetools
     state: present
