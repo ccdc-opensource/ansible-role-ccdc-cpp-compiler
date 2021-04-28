@@ -2,7 +2,7 @@
 - name: Install build tools
   yum:
     name:
-      - devtoolset-9
+      - devtoolset-10
       - llvm-toolset-10.0
       - llvm-toolset-10.0-git-clang-format
       - llvm-toolset-10.0-clang-tools-extra
@@ -12,15 +12,13 @@
 
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
-  lineinfile:
-    path: "/etc/profile.d/enable-devtoolset.sh"
-    line: "\nsource scl_source enable devtoolset-9\n"
-    create: yes
+  copy:
+    src: enable-devtoolset.sh
+    dest: /etc/profile.d/enable-devtoolset.sh
   become: yes
 
 - name: Enable llvm-toolset globally for all users
-  lineinfile:
-    path: "/etc/profile.d/enable-llvm-toolset.sh"
-    line: "\nsource scl_source enable llvm-toolset-10.0\n"
-    create: yes
+  copy:
+    src: enable-llvm-toolset.sh
+    dest: /etc/profile.d/enable-llvm-toolset.sh
   become: yes

@@ -1,7 +1,7 @@
 ---
 - name: Check for existing Xcode installation
   stat:
-    path: /Applications/Xcode.app
+    path: "/Applications/Xcode_{{ xcode_version }}.app"
   register: xcode_app
 
 - name: "Download XCode {{ xcode_version }}"
@@ -27,13 +27,22 @@
   args:
     chdir: "/Applications"
     creates: "/Applications/Xcode.app"
+  when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
   register: extract_xcode_xip
+
+- name: Move XCode to /Applications/Xcode_{{ xcode_version }}.app
+  command: mv /Applications/Xcode.app /Applications/Xcode_{{ xcode_version }}.app
+  when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
 
 - name: Remove downloaded Xcode archive
   file:
     state: absent
     path: "~/Downloads/Xcode_{{ xcode_version }}.xip"
   
+- name: switch to /Applications/Xcode_{{ xcode_version }}.app
+  command: xcode-select --switch /Applications/Xcode_{{ xcode_version }}.app/Contents/Developer
+  become: true
+
 - name: Accept Xcode licence
   command: xcodebuild -license accept
   become: true
@@ -44,7 +53,7 @@
 
 - name: Get list of packages available with Xcode
   find:
-    path: /Applications/Xcode.app/Contents/Resources/Packages/
+    path: /Applications/Xcode_{{ xcode_version }}.app/Contents/Resources/Packages/
     patterns: '*.pkg'
     recurse: no
   register: packages
