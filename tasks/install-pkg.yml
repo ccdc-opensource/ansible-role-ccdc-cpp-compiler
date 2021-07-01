@@ -1,5 +1,5 @@
 ---
-- name: read package info
+- name: read package info # noqa: no-changed-when
   command: installer -pkginfo -pkg "{{ package_file }}"
   register: package_pkginfo
 

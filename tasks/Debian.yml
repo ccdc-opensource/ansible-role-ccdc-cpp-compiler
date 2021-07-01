@@ -3,5 +3,5 @@
   apt:
     name:
       - build-essential
-    state: latest
-  become: yes
+    state: present
+  become: true
