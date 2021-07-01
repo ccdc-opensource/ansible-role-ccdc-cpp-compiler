@@ -6,18 +6,17 @@ Applying this role will set up appropriate C++ compilers and base system require
 
 ### Linux
 
-- devtoolset-8 (CentOS)
-- build-essential (Debian)
-
+-   devtoolset-10 (CentOS)
+-   build-essential (Debian)
 
 ### macOS
 
-- XCode
+-   XCode
 
 ### Windows
 
-- Visual Studio 2017 VC Tools
-- Visual Studio 2017 Remote Tools
+-   Visual Studio 2019 VC Tools
+-   Visual Studio 2010 Remote Tools
 
 ## Requirements
 
@@ -35,7 +34,7 @@ None.
 
     - hosts: all
       roles:
-        - ccdc-cpp-compiler
+        - ccdc.cpp_compiler
 
 ## License
 

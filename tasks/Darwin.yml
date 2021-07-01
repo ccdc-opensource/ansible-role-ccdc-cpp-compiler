@@ -6,7 +6,7 @@
 
 - name: "Download XCode {{ xcode_version }}"
   shell: >
-    jfrog rt dl 
+    jfrog rt dl
     --flat
     --fail-no-op
     --retries=100
@@ -38,23 +38,23 @@
   file:
     state: absent
     path: "~/Downloads/Xcode_{{ xcode_version }}.xip"
-  
-- name: switch to /Applications/Xcode_{{ xcode_version }}.app
+
+- name: switch to /Applications/Xcode_{{ xcode_version }}.app # noqa: no-changed-when
   command: xcode-select --switch /Applications/Xcode_{{ xcode_version }}.app/Contents/Developer
   become: true
 
-- name: Accept Xcode licence
+- name: Accept Xcode licence # noqa: no-changed-when
   command: xcodebuild -license accept
   become: true
 
-- name: Get list of installed packages
+- name: Get list of installed packages # noqa: no-changed-when
   command: pkgutil --pkgs
   register: pkgutil_packages
 
 - name: Get list of packages available with Xcode
   find:
     path: /Applications/Xcode_{{ xcode_version }}.app/Contents/Resources/Packages/
-    patterns: '*.pkg'
+    patterns: "*.pkg"
     recurse: no
   register: packages
 
