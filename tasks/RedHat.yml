@@ -1,0 +1,26 @@
+---
+- name: Install build tools
+  ansible.builtin.dnf:
+    name:
+      - '@Development tools'
+      - llvm-toolset-10.0
+      - llvm-toolset-10.0-git-clang-format
+      - llvm-toolset-10.0-clang-tools-extra
+    state: present
+    use_backend: yum
+  become: true
+
+- name: Enable devtoolset globally for all users
+  # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
+  copy:
+    src: enable-devtoolset.sh
+    dest: /etc/profile.d/enable-devtoolset.sh
+    mode: u=rwx,g=rx,o=rx
+  become: true
+
+- name: Enable llvm-toolset globally for all users
+  copy:
+    src: enable-llvm-toolset.sh
+    dest: /etc/profile.d/enable-llvm-toolset.sh
+    mode: u=rwx,g=rx,o=rx
+  become: true
