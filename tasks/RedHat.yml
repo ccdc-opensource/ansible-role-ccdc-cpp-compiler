@@ -3,9 +3,10 @@
   ansible.builtin.dnf:
     name:
       - '@Development tools'
-      - llvm-toolset-10.0
-      - llvm-toolset-10.0-git-clang-format
-      - llvm-toolset-10.0-clang-tools-extra
+      - llvm-toolset
+      - clang
+      - clang-tools-extra
+      - git-clang-format
     state: present
   become: true
 
