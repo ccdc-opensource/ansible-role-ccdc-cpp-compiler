@@ -7,7 +7,6 @@
       - llvm-toolset-10.0-git-clang-format
       - llvm-toolset-10.0-clang-tools-extra
     state: present
-    use_backend: yum
   become: true
 
 - name: Enable devtoolset globally for all users
