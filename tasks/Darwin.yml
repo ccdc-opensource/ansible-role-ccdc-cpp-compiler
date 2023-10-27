@@ -1,11 +1,11 @@
 ---
 - name: Check for existing Xcode installation
-  stat:
+  ansible.builtin.stat:
     path: "/Applications/Xcode_{{ xcode_version }}.app"
   register: xcode_app
 
 - name: "Download XCode {{ xcode_version }}"
-  shell: >
+  ansible.builtin.shell: >
     jfrog rt dl
     --flat
     --fail-no-op
@@ -21,45 +21,49 @@
     JFROG_CLI_OFFER_CONFIG: "false"
   when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
   register: download
+  args:
+    creates: "~/Downloads/Xcode_{{ xcode_version }}.xip"
 
 - name: Extract XCode archive
-  command: xip -x ~/Downloads/Xcode_{{ xcode_version }}.xip
+  ansible.builtin.command: xip -x ~/Downloads/Xcode_{{ xcode_version }}.xip
   args:
     chdir: "/Applications"
     creates: "/Applications/Xcode.app"
   when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
   register: extract_xcode_xip
 
-- name: Move XCode to /Applications/Xcode_{{ xcode_version }}.app
-  command: mv /Applications/Xcode.app /Applications/Xcode_{{ xcode_version }}.app
+- name: Move XCode to /Applications/Xcode_{{ xcode_version }}.app # noqa: name[template]
+  ansible.builtin.command: mv /Applications/Xcode.app /Applications/Xcode_{{ xcode_version }}.app
   when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
+  args:
+    creates: "/Applications/Xcode_{{ xcode_version }}.app"
 
 - name: Remove downloaded Xcode archive
-  file:
+  ansible.builtin.file:
     state: absent
     path: "~/Downloads/Xcode_{{ xcode_version }}.xip"
 
-- name: switch to /Applications/Xcode_{{ xcode_version }}.app # noqa: no-changed-when
-  command: xcode-select --switch /Applications/Xcode_{{ xcode_version }}.app/Contents/Developer
+- name: Switch to /Applications/Xcode_{{ xcode_version }}.app # noqa: no-changed-when name[template]
+  ansible.builtin.command: xcode-select --switch /Applications/Xcode_{{ xcode_version }}.app/Contents/Developer
   become: true
 
 - name: Accept Xcode licence # noqa: no-changed-when
-  command: xcodebuild -license accept
+  ansible.builtin.command: xcodebuild -license accept
   become: true
 
 - name: Get list of installed packages # noqa: no-changed-when
-  command: pkgutil --pkgs
+  ansible.builtin.command: pkgutil --pkgs
   register: pkgutil_packages
 
 - name: Get list of packages available with Xcode
-  find:
+  ansible.builtin.find:
     path: /Applications/Xcode_{{ xcode_version }}.app/Contents/Resources/Packages/
     patterns: "*.pkg"
     recurse: no
   register: packages
 
-- name: Install Xcode packages
-  include: install-pkg.yml
+- name: Install Xcode packages # noqa: deprecated-module
+  ansible.builtin.include: install-pkg.yml
   vars:
     package_file: "{{ package }}"
     package_list: "{{ pkgutil_packages.stdout }}"

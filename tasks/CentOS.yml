@@ -1,6 +1,6 @@
 ---
 - name: Install build tools
-  yum:
+  ansible.builtin.yum:
     name:
       - devtoolset-10
       - llvm-toolset-10.0
@@ -12,14 +12,14 @@
 
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
-  copy:
+  ansible.builtin.copy:
     src: enable-devtoolset.sh
     dest: /etc/profile.d/enable-devtoolset.sh
     mode: u=rwx,g=rx,o=rx
   become: true
 
 - name: Enable llvm-toolset globally for all users
-  copy:
+  ansible.builtin.copy:
     src: enable-llvm-toolset.sh
     dest: /etc/profile.d/enable-llvm-toolset.sh
     mode: u=rwx,g=rx,o=rx
