@@ -1,9 +1,9 @@
 ---
-- name: read package info # noqa: no-changed-when
-  command: installer -pkginfo -pkg "{{ package_file }}"
+- name: Read package info # noqa: no-changed-when
+  ansible.builtin.command: installer -pkginfo -pkg "{{ package_file }}"
   register: package_pkginfo
 
-- name: install package
-  command: installer -pkg "{{ package_file }}" -target /
+- name: Install package # noqa: no-changed-when
+  ansible.builtin.command: installer -pkg "{{ package_file }}" -target /
   when: package_pkginfo.stdout not in package_list
   become: true
