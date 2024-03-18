@@ -7,13 +7,12 @@
   args:
     creates: "/Applications/Xcode_{{ xcode_version }}.app"
 
-# TODO: Check whether we still need these
-# - name: Switch to Xcode {{ xcode_version }} # noqa: no-changed-when name[template]
-#   ansible.builtin.command: xcodes select {{ xcode_version }}
+- name: Switch to Xcode {{ xcode_version }} # noqa: no-changed-when name[template]
+  ansible.builtin.command: xcodes select {{ xcode_version }}
 
-# - name: Accept Xcode licence # noqa: no-changed-when
-#   ansible.builtin.command: xcodebuild -license accept
-#   become: true
+- name: Accept Xcode licence # noqa: no-changed-when
+  ansible.builtin.command: xcodebuild -license accept
+  become: true
 
 - name: Get list of installed packages # noqa: no-changed-when
   ansible.builtin.command: pkgutil --pkgs
@@ -27,7 +26,7 @@
   register: packages
 
 - name: Install Xcode packages # noqa: deprecated-module
-  ansible.builtin.include: install-pkg.yml
+  ansible.builtin.include_tasks: install-pkg.yml
   vars:
     package_file: "{{ package }}"
     package_list: "{{ pkgutil_packages.stdout }}"
