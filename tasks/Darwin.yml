@@ -1,6 +1,6 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
-  ansible.builtin.command: |
+  ansible.builtin.shell: |
     XCODES_USERNAME={{ lookup("env", "CCDC_APPLE_ID_USERNAME") }} \
     XCODES_PASSWORD={{ lookup("env", "CCDC_APPLE_ID_PASSWORD") }} \
     xcodes install {{ xcode_version }} --experimental-unxip --select
