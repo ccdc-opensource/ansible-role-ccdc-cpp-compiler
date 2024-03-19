@@ -3,12 +3,9 @@
   ansible.builtin.shell: |
     XCODES_USERNAME={{ lookup("env", "CCDC_APPLE_ID_USERNAME") }} \
     XCODES_PASSWORD={{ lookup("env", "CCDC_APPLE_ID_PASSWORD") }} \
-    xcodes install {{ xcode_version }} --experimental-unxip
+    xcodes install {{ xcode_version }} --experimental-unxip --select
   args:
     creates: "/Applications/Xcode_{{ xcode_version }}.app"
-
-- name: Switch to Xcode {{ xcode_version }} # noqa: no-changed-when name[template]
-  ansible.builtin.command: xcodes select {{ xcode_version }}
 
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
