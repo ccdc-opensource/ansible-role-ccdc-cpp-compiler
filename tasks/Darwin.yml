@@ -1,51 +1,11 @@
 ---
-- name: Check for existing Xcode installation
-  ansible.builtin.stat:
-    path: "/Applications/Xcode_{{ xcode_version }}.app"
-  register: xcode_app
-
-- name: "Download XCode {{ xcode_version }}"
-  ansible.builtin.shell: >
-    jfrog rt dl
-    --flat
-    --fail-no-op
-    --retries=100
-    "--url=https://artifactory.ccdc.cam.ac.uk/artifactory"
-    "--user={{ ansible_deployment_artifactory_user }}"
-    "--password={{ ansible_deployment_artifactory_key }}"
-    "ccdc-3rdparty-macos-xcode-installers/Xcode_{{ xcode_version }}.xip"
-    ~/Downloads/
-  environment:
-    PATH: "/usr/local/bin:/usr/bin"
-    CI: "true"
-    JFROG_CLI_OFFER_CONFIG: "false"
-  when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
-  register: download
-  args:
-    creates: "~/Downloads/Xcode_{{ xcode_version }}.xip"
-
-- name: Extract XCode archive
-  ansible.builtin.command: xip -x ~/Downloads/Xcode_{{ xcode_version }}.xip
-  args:
-    chdir: "/Applications"
-    creates: "/Applications/Xcode.app"
-  when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
-  register: extract_xcode_xip
-
-- name: Move XCode to /Applications/Xcode_{{ xcode_version }}.app # noqa: name[template]
-  ansible.builtin.command: mv /Applications/Xcode.app /Applications/Xcode_{{ xcode_version }}.app
-  when: xcode_app.stat.isdir is not defined or not xcode_app.stat.isdir
+- name: Install Xcode v{{ xcode_version }} # noqa: name[template]
+  ansible.builtin.shell: |
+    XCODES_USERNAME={{ lookup("env", "CCDC_APPLE_ID_USERNAME") }} \
+    XCODES_PASSWORD={{ lookup("env", "CCDC_APPLE_ID_PASSWORD") }} \
+    xcodes install {{ xcode_version }} --experimental-unxip --select
   args:
     creates: "/Applications/Xcode_{{ xcode_version }}.app"
-
-- name: Remove downloaded Xcode archive
-  ansible.builtin.file:
-    state: absent
-    path: "~/Downloads/Xcode_{{ xcode_version }}.xip"
-
-- name: Switch to /Applications/Xcode_{{ xcode_version }}.app # noqa: no-changed-when name[template]
-  ansible.builtin.command: xcode-select --switch /Applications/Xcode_{{ xcode_version }}.app/Contents/Developer
-  become: true
 
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
@@ -63,7 +23,7 @@
   register: packages
 
 - name: Install Xcode packages # noqa: deprecated-module
-  ansible.builtin.include: install-pkg.yml
+  ansible.builtin.include_tasks: install-pkg.yml
   vars:
     package_file: "{{ package }}"
     package_list: "{{ pkgutil_packages.stdout }}"
