@@ -1,6 +1,6 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
-  ansible.builtin.command: /usr/local/bin/xcodes install {{ xcode_version }} --experimental-unxip --select --use-fastlane-auth 
+  ansible.builtin.command: /usr/local/bin/xcodes install {{ xcode_version }} --select --use-fastlane-auth 
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
 
