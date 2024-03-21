@@ -5,7 +5,7 @@
     sudo -E xcodes install {{ xcode_version }} --select --use-fastlane-auth --aria2 "/usr/local/bin/aria2c"
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
-    executable: "/usr/local/bin/xcodes"
+    #executable: "/usr/local/bin/xcodes"
   register: install_status
 
 - debug: var=install_status.stdout
