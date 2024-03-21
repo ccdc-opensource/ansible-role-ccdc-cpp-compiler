@@ -3,11 +3,12 @@
   ansible.builtin.shell: |
     export FASTLANE_SESSION="{{ FASTLANE_SESSION }}"
     echo $FASTLANE_SESSION >> /tmp/log.txt
-    echo /usr/local/bin/xcodes install {{ xcode_version }} >> /tmp/log.txt
+    echo xcodes install {{ xcode_version }} >> /tmp/log.txt
     pwd >> /tmp/log.txt
     sudo -E xcodes install {{ xcode_version }} --directory "/tmp/xcodes/" >> /tmp/log.txt
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
+    executable: /usr/local/bin/xcodes
   register: install_status
 
 - debug: var=install_status.stdout
