@@ -1,10 +1,11 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell: |
-    set timeout 120
     export FASTLANE_SESSION="{{ FASTLANE_SESSION }}"
     echo $FASTLANE_SESSION >> /tmp/log.txt
-    sudo -E /usr/local/bin/xcodes install {{ xcode_version }}
+    echo /usr/local/bin/xcodes install {{ xcode_version }} >> /tmp/log.txt
+    pwd >> /tmp/log.txt
+    sudo -E xcodes install {{ xcode_version }} --directory "/tmp/xcodes/" >> /tmp/log.txt
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   register: install_status
