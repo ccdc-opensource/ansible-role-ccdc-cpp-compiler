@@ -1,7 +1,7 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.command:
-    cmd: sudo -E /usr/local/bin/xcodes install {{ xcode_version }} --select --use-fastlane-auth --aria2 /usr/local/bin/aria2c >> /tmp/log.txt
+    cmd: sudo -E /usr/local/bin/xcodes install {{ xcode_version }} --select --use-fastlane-auth --aria2 /usr/local/bin/aria2c
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
