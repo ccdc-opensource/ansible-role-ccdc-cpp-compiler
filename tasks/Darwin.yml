@@ -3,6 +3,7 @@
   ansible.builtin.copy:
     src: /files/install-xcodes.sh
     dest: /tmp/install-xcodes.sh
+  remote_src: true
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.command:
