@@ -4,7 +4,10 @@
     src: /files/install-xcodes.sh
     dest: /tmp/install-xcodes.sh
   remote_src: true
-
+  
+- name: chmod script 
+  ansible.builtin.command: chmod +x /tmp/install-xcodes.sh
+  
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.command:
     cmd: /tmp/install-xcodes.sh
