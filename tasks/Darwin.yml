@@ -1,7 +1,7 @@
 ---
 - name: Copy xcode script
   ansible.builtin.copy:
-    src: /files/install-xcodes.sh
+    src: files/install-xcodes.sh
     dest: /tmp/install-xcodes.sh
     remote_src: true
   
