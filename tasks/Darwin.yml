@@ -6,6 +6,8 @@
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
     FASTLANE_SESSION: "{{ FASTLANE_SESSION }}"
+    XCODES_USERNAME: "{{ CCDC_APPLE_ID_USERNAME }}"
+    XCODES_PASSWORD: "{{ CCDC_APPLE_ID_PASSWORD }}"
 
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
