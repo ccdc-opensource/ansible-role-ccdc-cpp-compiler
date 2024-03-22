@@ -15,8 +15,7 @@
     "ccdc-3rdparty-macos-xcode-installers/Xcode-14.2.0+14C18.xip"
     /tmp/
   environment:
-    PATH: /usr/local/bin:{{ ansible_env.PATH }}
-    SHELL: /bin/zsh
+    PATH: "/usr/local/bin:/usr/bin"
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
