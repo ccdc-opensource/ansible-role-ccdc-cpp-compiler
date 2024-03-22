@@ -1,7 +1,7 @@
 ---
 - name: Downlaod Xcode v{{ xcode_version }}
-  shell: >
-    jfrog rt dl
+  ansible.builtin.shell: >
+    jf rt dl
     --flat
     --fail-no-op
     --retries=100
