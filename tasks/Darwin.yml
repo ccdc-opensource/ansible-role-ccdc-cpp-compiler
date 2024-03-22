@@ -1,6 +1,12 @@
 ---
+- name: shell test
+  ansible.builtin.shell: 
+    cmd: ls -l
+    
+  
 - name: Downlaod Xcode v{{ xcode_version }}
-  ansible.builtin.shell: >
+  ansible.builtin.shell: 
+  cmd: >
     jf rt dl
     --flat
     --fail-no-op
