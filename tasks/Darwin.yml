@@ -5,6 +5,9 @@
       set timeout 300
       echo $FASTLANE_SESSION >> /tmp/log.txt
       echo $XCODES_USERNAME >> /tmp/log.txt
+      echo $USER >> /tmp/log.txt
+      sudo su - vagrant
+      echo $USER >> /tmp/log.txt
       xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --no-superuser --no-color >> /tmp/log.txt
       exit 0 
   args:
@@ -14,8 +17,6 @@
     XCODES_USERNAME: "{{ CCDC_APPLE_ID_USERNAME }}"
     XCODES_PASSWORD: "{{ CCDC_APPLE_ID_PASSWORD }}"
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
-  become: true
-  remote_user: vagrant 
 
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
