@@ -13,6 +13,7 @@
     /tmp/
   environment:
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
+    SHELL: /bin/zsh
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
