@@ -1,11 +1,17 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
-  ansible.builtin.command:
-    cmd: xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --no-superuser --no-color
-  become: yes
-  remote_user: vagrant 
+  ansible.builtin.shell:
+    cmd: | 
+      set timeout 300
+      ssh vagrant@{{ inventory_hostname }}
+      export FASTLANE_SESSION="{{ FASTLANE_SESSION }}"
+      export XCODES_USERNAME="{{ CCDC_APPLE_ID_USERNAME }}"
+      export XCODES_PASSWORD="{{ CCDC_APPLE_ID_PASSWORD }}"
+      xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --no-superuser --no-color
+      exit 0
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
+    delegate_to: localhost
   environment:
     FASTLANE_SESSION: "{{ FASTLANE_SESSION }}"
     XCODES_USERNAME: "{{ CCDC_APPLE_ID_USERNAME }}"
