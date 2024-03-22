@@ -9,7 +9,7 @@
       xcodes help install >> /tmp/log.txt
       xcodes install >> /tmp/log.txt
       xcodes install --use-fastlane-auth >> /tmp/log.txt
-      xcodes install 14.2.0 >> /tmp/log.txt
+      xcodes install 14.2.0 --no-aria2 >> /tmp/log.txt
       xcodes install 14.2.0 --use-fastlane-auth >> /tmp/log.txt
       # xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --aria2 aria2c --no-superuser --no-color >> /tmp/log.txt
       exit 0 
