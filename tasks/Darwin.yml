@@ -3,7 +3,7 @@
   ansible.builtin.shell:
     cmd: | 
       set timeout 300
-      ssh vagrant@{{ ansible_host }}
+      spawn ssh vagrant@{{ ansible_host }} \
       export FASTLANE_SESSION="{{ FASTLANE_SESSION }}"
       export XCODES_USERNAME="{{ CCDC_APPLE_ID_USERNAME }}"
       export XCODES_PASSWORD="{{ CCDC_APPLE_ID_PASSWORD }}"
