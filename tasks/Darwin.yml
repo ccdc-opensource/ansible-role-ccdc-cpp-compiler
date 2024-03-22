@@ -8,9 +8,9 @@
     "--url=https://artifactory.ccdc.cam.ac.uk/artifactory"
     "--user={{ ansible_deployment_artifactory_user }}"
     "--password={{ ansible_deployment_artifactory_key }}"
-    "--props=XCODE_VERSION=(( xcode_version }}"
+    "--props=XCODE_VERSION={{ xcode_version }}"
     "ccdc-3rdparty-macos-xcode-installers/"
-    /tmp/xcode-(( xcode_version )) 
+    /tmp/xcode-{{ xcode_version }} 
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
