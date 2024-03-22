@@ -11,7 +11,7 @@
       exit 0
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
-    delegate_to: localhost
+  delegate_to: localhost
   environment:
     FASTLANE_SESSION: "{{ FASTLANE_SESSION }}"
     XCODES_USERNAME: "{{ CCDC_APPLE_ID_USERNAME }}"
