@@ -1,8 +1,9 @@
 ---
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.command:
-    cmd: |
-      xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --no-superuser --no-color
+    cmd: xcodes install {{ xcode_version }} --select --use-fastlane-auth --experimental-unxip --no-superuser --no-color
+  become: yes
+  remote_user: vagrant 
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
@@ -10,8 +11,6 @@
     XCODES_USERNAME: "{{ CCDC_APPLE_ID_USERNAME }}"
     XCODES_PASSWORD: "{{ CCDC_APPLE_ID_PASSWORD }}"
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
-  become: true
-  remote_user: vagrant 
   
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
