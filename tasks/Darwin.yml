@@ -16,7 +16,7 @@
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
-   creates: /tmp/xcode-"{{ xcode-version }}"
+   creates: /tmp/xcode-"{{ xcode_version }}"
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
