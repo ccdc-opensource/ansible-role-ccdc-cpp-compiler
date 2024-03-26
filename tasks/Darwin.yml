@@ -18,7 +18,7 @@
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
-    cmd: /usr/local/bin/xcodes install --path /tmp/xcode-{{ xcode_version }} --experimental-unxip
+    cmd: /usr/local/bin/xcodes install --path /tmp/xcode-{{ xcode_version }} --experimental-unxip --version {{ xcode_version }} 
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
