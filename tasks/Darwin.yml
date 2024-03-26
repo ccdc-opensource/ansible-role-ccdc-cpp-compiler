@@ -1,8 +1,4 @@
 ---
-- name: shell test
-  ansible.builtin.shell: ls -l
-    
-  
 - name: Downlaod Xcode v{{ xcode_version }}
   ansible.builtin.shell: >
     jf rt dl
@@ -11,9 +7,10 @@
     --retries=100
     --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
     --user={{ ansible_deployment_artifactory_user }}
+    --props="XCODE_VERSION={{ xcode_version }}"
     --password="{{ ansible_deployment_artifactory_key }}"
-    "ccdc-3rdparty-macos-xcode-installers/Xcode-14.2.0+14C18.xip"
-    /tmp/
+    "ccdc-3rdparty-macos-xcode-installers/"
+    /tmp/xcode-{{ xcode_version }}
   environment:
     PATH: "/usr/local/bin:/usr/bin"
     CI: "true"
