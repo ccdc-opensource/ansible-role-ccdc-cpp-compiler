@@ -10,7 +10,7 @@
     --props="XCODE_VERSION={{ xcode_version }}"
     --password="{{ ansible_deployment_artifactory_key }}"
     "ccdc-3rdparty-macos-xcode-installers/"
-    /tmp/xcode-{{ xcode_version }}
+    /tmp/xcode-{{ xcode_version }}.xip
   environment:
     PATH: "/usr/local/bin:/usr/bin"
     CI: "true"
