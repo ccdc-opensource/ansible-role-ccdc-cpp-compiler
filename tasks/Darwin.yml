@@ -16,6 +16,8 @@
     /tmp/
   environment:
     PATH: "/usr/local/bin:/usr/bin"
+    CI: "true"
+    JFROG_CLI_OFFER_CONFIG: "false"
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template]
   ansible.builtin.shell:
