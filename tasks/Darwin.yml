@@ -25,7 +25,12 @@
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
-  
+
+- name: Set CLI tools path
+  ansible.builtin.command: 
+    cmd: xcode-select -s /Applications/Xcode-{{ xcode_version }}.app/Contents/Developer
+  become: true
+    
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
   become: true
