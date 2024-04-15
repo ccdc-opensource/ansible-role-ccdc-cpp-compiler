@@ -1,11 +1,35 @@
 ---
-- name: Install Xcode v{{ xcode_version }} # noqa: name[template]
-  ansible.builtin.shell: |
-    XCODES_USERNAME={{ lookup("env", "CCDC_APPLE_ID_USERNAME") }} \
-    XCODES_PASSWORD={{ lookup("env", "CCDC_APPLE_ID_PASSWORD") }} \
-    xcodes install {{ xcode_version }} --experimental-unxip --select
+- name: Downlaod Xcode v{{ xcode_version }}
+  ansible.builtin.shell: >
+    jf rt dl
+    --flat
+    --fail-no-op
+    --retries=100
+    --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
+    --user={{ ansible_deployment_artifactory_user }}
+    --props="XCODE_VERSION={{ xcode_version }}"
+    --password="{{ ansible_deployment_artifactory_key }}"
+    "ccdc-3rdparty-macos-xcode-installers/"
+    /tmp/xcode-{{ xcode_version }}.xip
+  environment:
+    PATH: "/usr/local/bin:/usr/bin"
+    CI: "true"
+    JFROG_CLI_OFFER_CONFIG: "false"
   args:
-    creates: "/Applications/Xcode_{{ xcode_version }}.app"
+   creates: /tmp/xcode-{{ xcode_version }}.xip
+
+- name: Install Xcode v{{ xcode_version }} # noqa: name[template]
+  ansible.builtin.shell:
+    cmd: /usr/local/bin/xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
+  args:
+    creates: "/Applications/Xcode-{{ xcode_version }}.app"
+  environment:
+    PATH: /usr/local/bin:{{ ansible_env.PATH }}
+
+- name: Set CLI tools path
+  ansible.builtin.command:
+    cmd: xcode-select -s /Applications/Xcode-{{ xcode_version }}.app/Contents/Developer
+  become: true
 
 - name: Accept Xcode licence # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
