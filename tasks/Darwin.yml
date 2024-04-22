@@ -16,9 +16,9 @@
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
-   creates: /tmp/xcode-{{ xcode_version }}.xip
+    creates: /tmp/xcode-{{ xcode_version }}.xip
 
-- name: Install Xcode v{{ xcode_version }} # noqa: name[template]
+- name: Install Xcode v{{ xcode_version }} # noqa: name[template] command-instead-of-shell
   ansible.builtin.shell:
     cmd: /usr/local/bin/xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
   args:
@@ -27,16 +27,16 @@
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
   become: true
 
-- name: Set CLI tools path
+- name: Set CLI tools path  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcode-select -s /Applications/Xcode-{{ xcode_version }}.app/Contents/Developer
   become: true
 
-- name: Accept Xcode licence # noqa: no-changed-when
+- name: Accept Xcode licence  # noqa: no-changed-when
   ansible.builtin.command: xcodebuild -license accept
   become: true
 
-- name: Get list of installed packages # noqa: no-changed-when
+- name: Get list of installed packages  # noqa: no-changed-when
   ansible.builtin.command: pkgutil --pkgs
   register: pkgutil_packages
 
