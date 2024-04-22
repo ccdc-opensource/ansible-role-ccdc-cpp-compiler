@@ -25,6 +25,7 @@
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
+  become: true
 
 - name: Set CLI tools path
   ansible.builtin.command:
