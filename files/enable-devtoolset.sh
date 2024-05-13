@@ -1,1 +1,1 @@
-source scl_source enable devtoolset-10
+source scl_source enable gcc-toolset-10
