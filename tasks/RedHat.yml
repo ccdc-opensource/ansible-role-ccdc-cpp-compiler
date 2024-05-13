@@ -20,9 +20,9 @@
     mode: u=rwx,g=rx,o=rx
   become: true
 
-- name: Enable llvm-toolset globally for all users
-  ansible.builtin.copy:
-    src: enable-llvm-toolset.sh
-    dest: /etc/profile.d/enable-llvm-toolset.sh
-    mode: u=rwx,g=rx,o=rx
-  become: true
+# - name: Enable llvm-toolset globally for all users
+#   ansible.builtin.copy:
+#     src: enable-llvm-toolset.sh
+#     dest: /etc/profile.d/enable-llvm-toolset.sh
+#     mode: u=rwx,g=rx,o=rx
+#   become: true
