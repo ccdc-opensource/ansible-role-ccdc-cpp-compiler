@@ -12,6 +12,12 @@
     state: present
   become: true
 
+- name: Create a symbolic link devtoolset-10 linking to gcc-toolset-10
+  ansible.builtin.file:
+    src: /opt/rh/gcc-toolset-10
+    dest: /opt/rh/devtoolset-10
+    state: link
+
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
   ansible.builtin.copy:
