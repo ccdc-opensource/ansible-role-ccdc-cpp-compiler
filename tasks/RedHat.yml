@@ -16,7 +16,10 @@
   ansible.builtin.file:
     src: /opt/rh/gcc-toolset-10
     dest: /opt/rh/devtoolset-10
+    owner: root
+    group: root
     state: link
+  become: true
 
 - name: Enable devtoolset globally for all users
   # See https://developers.redhat.com/blog/2014/03/19/permanently-enable-a-software-collection/
