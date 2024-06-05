@@ -1,43 +1,56 @@
 ---
-- name: Downlaod Xcode v{{ xcode_version }}
-  ansible.builtin.shell: >
-    jf rt dl
-    --flat
-    --fail-no-op
-    --retries=100
-    --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
-    --user={{ ansible_deployment_artifactory_user }}
-    --props="XCODE_VERSION={{ xcode_version }}"
-    --password="{{ ansible_deployment_artifactory_key }}"
-    "ccdc-3rdparty-macos-xcode-installers/"
-    /tmp/xcode-{{ xcode_version }}.xip
+- name: Check for existing Xcode v{{ xcode_version }}
+  ansible.builtin.command:
+    cmd: xcodes installed {{ xcode_version }}
+  check_mode: true
+  ignore_errors: "{{ ansible_check_mode }}"
+  register: xcode_check
   environment:
-    PATH: "/usr/local/bin:/usr/bin"
+    PATH: /opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}
+
+- name: Download Xcode v{{ xcode_version }}
+  when: xcode_check.rc != 0
+  ansible.builtin.command:
+    cmd: >
+      jf rt dl
+      --flat
+      --fail-no-op
+      --retries=100
+      --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
+      --user={{ ansible_deployment_artifactory_user }}
+      --props="XCODE_VERSION={{ xcode_version }}"
+      --password="{{ ansible_deployment_artifactory_key }}"
+      "ccdc-3rdparty-macos-xcode-installers/"
+      /tmp/xcode-{{ xcode_version }}.xip
+  environment:
+    PATH: /opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
     creates: /tmp/xcode-{{ xcode_version }}.xip
 
-- name: Install Xcode v{{ xcode_version }} # noqa: name[template] command-instead-of-shell
-  ansible.builtin.shell:
-    cmd: /usr/local/bin/xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
+- name: Install Xcode v{{ xcode_version }}
+  when: xcode_check.rc != 0
+  ansible.builtin.command:
+    cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
-  become: true
 
-- name: Set CLI tools path  # noqa: no-changed-when
+- name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
-    cmd: xcode-select -s /Applications/Xcode-{{ xcode_version }}.app/Contents/Developer
-  become: true
+    cmd: xcodes select {{ xcode_version }}
 
-- name: Accept Xcode licence  # noqa: no-changed-when
-  ansible.builtin.command: xcodebuild -license accept
-  become: true
+- name: Accept Xcode licence
+  ansible.builtin.command:
+    cmd: xcodebuild -license accept
+  check_mode: true
 
-- name: Get list of installed packages  # noqa: no-changed-when
-  ansible.builtin.command: pkgutil --pkgs
+- name: Get list of installed packages
+  ansible.builtin.command:
+    cmd: pkgutil --pkgs
+  check_mode: true
   register: pkgutil_packages
 
 - name: Get list of packages available with Xcode
@@ -47,7 +60,7 @@
     recurse: no
   register: packages
 
-- name: Install Xcode packages # noqa: deprecated-module
+- name: Install Xcode packages
   ansible.builtin.include_tasks: install-pkg.yml
   vars:
     package_file: "{{ package }}"
