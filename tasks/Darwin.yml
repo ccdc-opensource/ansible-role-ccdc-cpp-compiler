@@ -6,7 +6,7 @@
   ignore_errors: "{{ ansible_check_mode }}"
   register: xcode_check
   environment:
-    PATH: /opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
 
 - name: Download Xcode v{{ xcode_version }}
   when: xcode_check.rc != 0
@@ -23,7 +23,7 @@
       "ccdc-3rdparty-macos-xcode-installers/"
       /tmp/xcode-{{ xcode_version }}.xip
   environment:
-    PATH: /opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
@@ -33,10 +33,8 @@
   when: xcode_check.rc != 0
   ansible.builtin.command:
     cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
-  args:
-    creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
-    PATH: /usr/local/bin:{{ ansible_env.PATH }}
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
 
 - name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
