@@ -12,7 +12,7 @@
     "ccdc-3rdparty-macos-xcode-installers/"
     /tmp/xcode-{{ xcode_version }}.xip
   environment:
-    PATH: "/usr/local/bin:/usr/bin"
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
@@ -20,11 +20,11 @@
 
 - name: Install Xcode v{{ xcode_version }} # noqa: name[template] command-instead-of-shell
   ansible.builtin.shell:
-    cmd: /usr/local/bin/xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
+    cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
   args:
     creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
-    PATH: /usr/local/bin:{{ ansible_env.PATH }}
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   become: true
 
 - name: Set CLI tools path  # noqa: no-changed-when
