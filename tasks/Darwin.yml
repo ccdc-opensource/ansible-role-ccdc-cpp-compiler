@@ -1,5 +1,5 @@
 ---
-- name: Check for existing Xcode v{{ xcode_version }}
+- name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes installed {{ xcode_version }}
   check_mode: true
@@ -42,12 +42,12 @@
   ansible.builtin.command:
     cmd: xcodes select {{ xcode_version }}
 
-- name: Accept Xcode licence
+- name: Accept Xcode licence  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodebuild -license accept
   check_mode: true
 
-- name: Get list of installed packages
+- name: Get list of installed packages  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: pkgutil --pkgs
   check_mode: true
