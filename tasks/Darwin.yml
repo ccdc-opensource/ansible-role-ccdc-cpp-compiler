@@ -29,7 +29,7 @@
   args:
     creates: /tmp/xcode-{{ xcode_version }}.xip
 
-- name: Install Xcode v{{ xcode_version }}
+- name: Install Xcode v{{ xcode_version }}  # noqa: no-changed-when
   when: xcode_check.rc != 0
   ansible.builtin.command:
     cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
