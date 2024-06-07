@@ -3,6 +3,17 @@
   ansible.builtin.set_fact:
     xcode_version: "{{ xcode_versions_by_macos[ansible_distribution_major_version] }}"
 
+- name: Ensure Homebrew packages are linked to system PATH
+  ansible.builtin.command:
+    cmd: brew link {{ package }}
+  environment:
+    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
+  loop:
+    - jfrog-cli
+    - xcodes
+  loop_control:
+    loop_var: package
+
 - name: Download Xcode v{{ xcode_version }}
   ansible.builtin.command:
     cmd: >
