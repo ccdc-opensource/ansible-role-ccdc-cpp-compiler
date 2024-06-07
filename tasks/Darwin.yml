@@ -1,4 +1,19 @@
 ---
+- name: Set Xcode version for macOS {{ ansible_distribution_major_version }}
+  ansible.builtin.set_fact:
+    xcode_version: "{{ xcode_versions_by_macos[ansible_distribution_major_version] }}"
+
+- name: Ensure Homebrew packages are linked to system PATH
+  ansible.builtin.command:
+    cmd: brew link {{ package }}
+  environment:
+    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
+  loop:
+    - jfrog-cli
+    - xcodes
+  loop_control:
+    loop_var: package
+
 - name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes installed {{ xcode_version }}
@@ -13,17 +28,17 @@
   ansible.builtin.command:
     cmd: >
       jf rt dl
-      --flat
-      --fail-no-op
-      --retries=100
-      --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
-      --user={{ ansible_deployment_artifactory_user }}
-      --props="XCODE_VERSION={{ xcode_version }}"
-      --password="{{ ansible_deployment_artifactory_key }}"
-      "ccdc-3rdparty-macos-xcode-installers/"
-      /tmp/xcode-{{ xcode_version }}.xip
+        --flat
+        --fail-no-op
+        --retries=100
+        --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
+        --user={{ ansible_deployment_artifactory_user }}
+        --props="XCODE_VERSION={{ xcode_version }}"
+        --password="{{ ansible_deployment_artifactory_key }}"
+        "ccdc-3rdparty-macos-xcode-installers/"
+        /tmp/xcode-{{ xcode_version }}.xip
   environment:
-    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
