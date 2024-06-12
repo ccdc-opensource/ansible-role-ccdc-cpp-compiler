@@ -20,7 +20,7 @@
 - name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes installed {{ xcode_version }}
-  ignore_errors: "{{ ansible_check_mode }}"
+  ignore_errors: true
   register: xcode_check
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
@@ -52,17 +52,19 @@
     cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+  become: true
 
 - name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes select {{ xcode_version }}
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+  become: true
 
 - name: Accept Xcode licence  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodebuild -license accept
-  check_mode: true
+  become: true
 
 - name: Get list of installed packages  # noqa: no-changed-when
   ansible.builtin.command:
