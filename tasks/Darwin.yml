@@ -57,6 +57,8 @@
 - name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes select {{ xcode_version }}
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
 
 - name: Accept Xcode licence  # noqa: no-changed-when
   ansible.builtin.command:
