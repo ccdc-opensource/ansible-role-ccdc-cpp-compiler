@@ -20,7 +20,6 @@
 - name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes installed {{ xcode_version }}
-  check_mode: true
   ignore_errors: "{{ ansible_check_mode }}"
   register: xcode_check
   environment:
