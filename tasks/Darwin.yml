@@ -13,8 +13,21 @@
     - xcodes
   loop_control:
     loop_var: package
+  register: link_package
+  changed_when: '"symlinks created." in link_package.stdout'
+  failed_when: link_package.rc != 0
+
+- name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
+  ansible.builtin.command:
+    cmd: xcodes installed {{ xcode_version }}
+  check_mode: true
+  ignore_errors: "{{ ansible_check_mode }}"
+  register: xcode_check
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
 
 - name: Download Xcode v{{ xcode_version }}
+  when: xcode_check.rc != 0
   ansible.builtin.command:
     cmd: >
       jf rt dl
@@ -34,26 +47,26 @@
   args:
     creates: /tmp/xcode-{{ xcode_version }}.xip
 
-- name: Install Xcode v{{ xcode_version }} # noqa: name[template] command-instead-of-shell
-  ansible.builtin.shell:
+- name: Install Xcode v{{ xcode_version }}  # noqa: no-changed-when
+  when: xcode_check.rc != 0
+  ansible.builtin.command:
     cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
-  args:
-    creates: "/Applications/Xcode-{{ xcode_version }}.app"
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
-  become: true
 
-- name: Set CLI tools path  # noqa: no-changed-when
+- name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
-    cmd: xcode-select -s /Applications/Xcode-{{ xcode_version }}.app/Contents/Developer
-  become: true
+    cmd: xcodes select {{ xcode_version }}
 
 - name: Accept Xcode licence  # noqa: no-changed-when
-  ansible.builtin.command: xcodebuild -license accept
-  become: true
+  ansible.builtin.command:
+    cmd: xcodebuild -license accept
+  check_mode: true
 
 - name: Get list of installed packages  # noqa: no-changed-when
-  ansible.builtin.command: pkgutil --pkgs
+  ansible.builtin.command:
+    cmd: pkgutil --pkgs
+  check_mode: true
   register: pkgutil_packages
 
 - name: Get list of packages available with Xcode
@@ -63,7 +76,7 @@
     recurse: no
   register: packages
 
-- name: Install Xcode packages # noqa: deprecated-module
+- name: Install Xcode packages
   ansible.builtin.include_tasks: install-pkg.yml
   vars:
     package_file: "{{ package }}"
