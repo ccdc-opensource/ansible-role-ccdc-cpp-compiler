@@ -1,4 +1,4 @@
----
+  ---
 - name: Set Xcode version for macOS {{ ansible_distribution_major_version }}
   ansible.builtin.set_fact:
     xcode_version: "{{ xcode_versions_by_macos[ansible_distribution_major_version] }}"
@@ -57,6 +57,8 @@
 - name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
   ansible.builtin.command:
     cmd: xcodes select {{ xcode_version }}
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
 
 - name: Accept Xcode licence  # noqa: no-changed-when
   ansible.builtin.command:
