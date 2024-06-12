@@ -1,4 +1,4 @@
-  ---
+---
 - name: Set Xcode version for macOS {{ ansible_distribution_major_version }}
   ansible.builtin.set_fact:
     xcode_version: "{{ xcode_versions_by_macos[ansible_distribution_major_version] }}"
