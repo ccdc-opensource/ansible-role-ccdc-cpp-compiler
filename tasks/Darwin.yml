@@ -1,8 +1,4 @@
 ---
-- name: Set Xcode version for macOS {{ ansible_distribution_major_version }}
-  ansible.builtin.set_fact:
-    xcode_version: "{{ xcode_versions_by_macos[ansible_distribution_major_version] }}"
-
 - name: Ensure Homebrew packages are linked to system PATH
   ansible.builtin.command:
     cmd: brew link {{ package }}
@@ -17,16 +13,17 @@
   changed_when: '"symlinks created." in link_package.stdout'
   failed_when: link_package.rc != 0
 
-- name: Check for existing Xcode v{{ xcode_version }}  # noqa: no-changed-when
+- name: Check for existing Xcode versions  # noqa: no-changed-when
   ansible.builtin.command:
-    cmd: xcodes installed {{ xcode_version }}
+    cmd: xcodes installed {{ item.xcode_version }}
   ignore_errors: true
   register: xcode_check
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+  loop: "{{ xcode_versions_to_install }}"
 
-- name: Download Xcode v{{ xcode_version }}
-  when: xcode_check.rc != 0
+- name: Download Xcode xip file
+  when: item.rc != 0
   ansible.builtin.command:
     cmd: >
       jf rt dl
@@ -35,28 +32,30 @@
         --retries=100
         --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
         --user={{ ansible_deployment_artifactory_user }}
-        --props="XCODE_VERSION={{ xcode_version }}"
+        --props="XCODE_VERSION={{ item.item.xcode_version }}"
         --password="{{ ansible_deployment_artifactory_key }}"
         "ccdc-3rdparty-macos-xcode-installers/"
-        /tmp/xcode-{{ xcode_version }}.xip
+        /tmp/xcode-{{ item.item.xcode_version }}.xip
   environment:
     PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
     CI: "true"
     JFROG_CLI_OFFER_CONFIG: "false"
   args:
-    creates: /tmp/xcode-{{ xcode_version }}.xip
+    creates: /tmp/xcode-{{ item.item.xcode_version }}.xip
+  loop: "{{ xcode_check.results }}"
 
-- name: Install Xcode v{{ xcode_version }}  # noqa: no-changed-when
-  when: xcode_check.rc != 0
+- name: Install Xcode  # noqa: no-changed-when
+  when: item.rc != 0
   ansible.builtin.command:
-    cmd: xcodes install {{ xcode_version }} --path /tmp/xcode-{{ xcode_version }}.xip --experimental-unxip
+    cmd: xcodes install {{ item.item.xcode_version }} --path /tmp/xcode-{{ item.item.xcode_version }}.xip --experimental-unxip
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   become: true
+  loop: "{{ xcode_check.results }}"
 
-- name: Set active Xcode to v{{ xcode_version }}  # noqa: no-changed-when
+- name: Set active Xcode to v{{ xcode_default_version }}  # noqa: no-changed-when
   ansible.builtin.command:
-    cmd: xcodes select {{ xcode_version }}
+    cmd: xcodes select {{ xcode_default_version }}
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   become: true
@@ -74,7 +73,7 @@
 
 - name: Get list of packages available with Xcode
   ansible.builtin.find:
-    path: /Applications/Xcode_{{ xcode_version }}.app/Contents/Resources/Packages/
+    path: /Applications/Xcode_{{ xcode_default_version }}.app/Contents/Resources/Packages/
     patterns: "*.pkg"
     recurse: no
   register: packages
