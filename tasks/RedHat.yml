@@ -9,6 +9,7 @@
       - git-clang-format
       - gcc-toolset-10
       - gcc-toolset-10-runtime
+      - gcc-toolset-10-libatomic-devel
     state: present
   become: true
 
