@@ -13,3 +13,18 @@
   chocolatey.chocolatey.win_chocolatey:
     name: visualstudio2019-remotetools
     state: present
+
+- name: Install visualstudio2022professional (SLOW)
+  chocolatey.chocolatey.win_chocolatey:
+    name: visualstudio2022professional
+    state: present
+
+- name: Install visualstudio2022-workload-nativedesktop (SLOW)
+  chocolatey.chocolatey.win_chocolatey:
+    name: visualstudio2022-workload-nativedesktop
+    state: present
+
+- name: Install visualstudio2022-remotetools
+  chocolatey.chocolatey.win_chocolatey:
+    name: visualstudio2022-remotetools
+    state: present
