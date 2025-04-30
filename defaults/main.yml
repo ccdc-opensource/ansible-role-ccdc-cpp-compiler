@@ -1,6 +1,5 @@
 ---
 xcode_versions_to_install:
-  - xcode_version: "12.5.1"
-  - xcode_version: "14.3.1"
+  - xcode_version: "16.3"
 
-xcode_default_version: "14.3.1"
+xcode_default_version: "16.3"
