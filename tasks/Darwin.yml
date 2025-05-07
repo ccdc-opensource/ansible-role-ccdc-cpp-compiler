@@ -1,17 +1,13 @@
 ---
 - name: Ensure Homebrew packages are linked to system PATH
-  ansible.builtin.command:
-    cmd: brew link {{ package }}
-  environment:
-    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
+  community.general.homebrew:
+    name: "{{ package }}"
+    state: linked
   loop:
     - jfrog-cli
     - xcodes
   loop_control:
     loop_var: package
-  register: link_package
-  changed_when: '"symlinks created." in link_package.stdout'
-  failed_when: link_package.rc != 0
 
 - name: Check for existing Xcode versions  # noqa: no-changed-when
   ansible.builtin.command:
