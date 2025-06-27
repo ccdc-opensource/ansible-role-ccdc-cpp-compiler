@@ -21,7 +21,7 @@
 - name: Install Xcode  # noqa: no-changed-when
   when: item.rc != 0
   ansible.builtin.command:
-    cmd: xcodes install {{ item.item.xcode_version }} --path {{ xcode-path }}/xcode-{{ item.item.xcode_version }}.xip --experimental-unxip
+    cmd: xcodes install {{ item.item.xcode_version }} --path {{ xcode_path }}/xcode-{{ item.item.xcode_version }}.xip --experimental-unxip
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   become: true
