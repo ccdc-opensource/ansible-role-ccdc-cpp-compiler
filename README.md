@@ -26,7 +26,7 @@ None.
 
 - {{ xcode_path }} - Path to xcode xip file
 
--   {{ xcode_version }} - Version of xcode on target machine
+- {{ xcode_version }} - Version of xcode on target machine
 
 ## Dependencies
 
