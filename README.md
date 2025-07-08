@@ -11,7 +11,7 @@ Applying this role will set up appropriate C++ compilers and base system require
 
 ### macOS
 
--   XCode
+-   Requires xcode-{{ xcode_version }}.xip to exist on target machine
 
 ### Windows
 
@@ -24,7 +24,9 @@ None.
 
 ## Role Variables
 
-None.
+- {{ xcode_path }} - Path to xcode xip file 
+
+- {{ xcode_version }} - Version of xcode on target machine
 
 ## Dependencies
 
