@@ -1,4 +1,3 @@
----
 # Dependabot version updates
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
 
@@ -14,9 +13,6 @@ registries:
     url: https://pkgs.dev.azure.com/ccdc/_packaging/ccdc/npm/v3/index.json
     username: ${{ secrets.AZURE_NUGET_ARTIFACTS_READ_ONLY_USER }}
     password: ${{ secrets.AZURE_NUGET_ARTIFACTS_READ_ONLY_TOKEN }}
-  nuget-public:
-    type: nuget-feed
-    url: https://api.npm.org/v3/index.json
 
   npm-artifactory:
     type: nuget-feed
@@ -28,9 +24,6 @@ registries:
     url: https://pkgs.dev.azure.com/ccdc/_packaging/ccdc/npm/registry/
     username: ${{ secrets.AZURE_NPM_ARTIFACTS_READ_ONLY_USER }}
     password: ${{ secrets.AZURE_NPM_ARTIFACTS_READ_ONLY_TOKEN }}
-  npm-public:
-    type: nuget-feed
-    url: https://registry.npmjs.org
 
 updates:
   # Enable version updates for NuGet
@@ -61,7 +54,7 @@ updates:
       # Prefix all commit messages with "NO_JIRA"
       prefix: "NO_JIRA"
 
-  # Enable version update for GitHub Actions
+# Enable version update for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     # Check GitHub Actions for updates every day (weekdays)

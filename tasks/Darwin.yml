@@ -1,17 +1,13 @@
 ---
 - name: Ensure Homebrew packages are linked to system PATH
-  ansible.builtin.command:
-    cmd: brew link {{ package }}
-  environment:
-    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
+  community.general.homebrew:
+    name: "{{ package }}"
+    state: linked
   loop:
     - jfrog-cli
     - xcodes
   loop_control:
     loop_var: package
-  register: link_package
-  changed_when: '"symlinks created." in link_package.stdout'
-  failed_when: link_package.rc != 0
 
 - name: Check for existing Xcode versions  # noqa: no-changed-when
   ansible.builtin.command:
@@ -22,32 +18,10 @@
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   loop: "{{ xcode_versions_to_install }}"
 
-- name: Download Xcode xip file
-  when: item.rc != 0
-  ansible.builtin.command:
-    cmd: >
-      jf rt dl
-        --flat
-        --fail-no-op
-        --retries=100
-        --url="https://artifactory.ccdc.cam.ac.uk/artifactory"
-        --user={{ ansible_deployment_artifactory_user }}
-        --props="XCODE_VERSION={{ item.item.xcode_version }}"
-        --password="{{ ansible_deployment_artifactory_key }}"
-        "ccdc-3rdparty-macos-xcode-installers/"
-        /tmp/xcode-{{ item.item.xcode_version }}.xip
-  environment:
-    PATH: "/usr/local/bin:/opt/homebrew/bin:{{ ansible_env.PATH }}"
-    CI: "true"
-    JFROG_CLI_OFFER_CONFIG: "false"
-  args:
-    creates: /tmp/xcode-{{ item.item.xcode_version }}.xip
-  loop: "{{ xcode_check.results }}"
-
 - name: Install Xcode  # noqa: no-changed-when
   when: item.rc != 0
   ansible.builtin.command:
-    cmd: xcodes install {{ item.item.xcode_version }} --path /tmp/xcode-{{ item.item.xcode_version }}.xip --experimental-unxip
+    cmd: xcodes install {{ item.item.xcode_version }} --path {{ xcode_path }}/Xcode_{{ item.item.xcode_version }}.xip --experimental-unxip
   environment:
     PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   become: true
