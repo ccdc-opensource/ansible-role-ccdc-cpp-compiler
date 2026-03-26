@@ -7,16 +7,16 @@
       - clang
       - clang-tools-extra
       - git-clang-format
-      - gcc-toolset-10
-      - gcc-toolset-10-runtime
-      - gcc-toolset-10-libatomic-devel
+      - gcc-toolset-14
+      - gcc-toolset-14-runtime
+      - gcc-toolset-14-libatomic-devel
     state: present
   become: true
 
-- name: Create a symbolic link devtoolset-10 linking to gcc-toolset-10
+- name: Create a symbolic link devtoolset-10 linking to gcc-toolset-14
   ansible.builtin.file:
-    src: /opt/rh/gcc-toolset-10
-    dest: /opt/rh/devtoolset-10
+    src: /opt/rh/gcc-toolset-14
+    dest: /opt/rh/devtoolset-14
     owner: root
     group: root
     state: link
