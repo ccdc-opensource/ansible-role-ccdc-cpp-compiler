@@ -1,13 +1,13 @@
 ---
-- name: Ensure Homebrew packages are linked to system PATH
+- name: Install Xcodes
   community.general.homebrew:
-    name: "{{ package }}"
+    name: xcodes
+    state: present
+
+- name: Link Xcodes
+  community.general.homebrew:
+    name: xcodes
     state: linked
-  loop:
-    - jfrog-cli
-    - xcodes
-  loop_control:
-    loop_var: package
 
 - name: Check for existing Xcode versions  # noqa: no-changed-when
   ansible.builtin.command:
