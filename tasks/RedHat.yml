@@ -10,6 +10,10 @@
       - gcc-toolset-10
       - gcc-toolset-10-runtime
       - gcc-toolset-10-libatomic-devel
+      - gcc-toolset-14
+      - gcc-toolset-14-runtime
+      - gcc-toolset-15
+      - gcc-toolset-15-runtime
     state: present
   become: true
 
