@@ -6,7 +6,7 @@ Applying this role will set up appropriate C++ compilers and base system require
 
 ### Linux
 
--   devtoolset-10 (CentOS)
+-   devtoolset-10 (RedHat aka Rocky)
 -   build-essential (Debian)
 
 ### macOS
