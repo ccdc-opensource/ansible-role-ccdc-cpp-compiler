@@ -8,12 +8,12 @@
 
 - name: Install Visual Studio Workload Native Desktop (SLOW)
   chocolatey.chocolatey.win_chocolatey:
-    name: 
+    name:
       - visualstudio2022-workload-nativedesktop
       - visualstudio2026-workload-nativedesktop
     state: present
 
-- name: Install Visual Studio Remotetools
+- name: Install Visual Studio Remote Tools
   chocolatey.chocolatey.win_chocolatey:
     name:
       - visualstudio2022-remotetools
